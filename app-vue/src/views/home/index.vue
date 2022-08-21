@@ -1,29 +1,25 @@
 <template>
-  <v-container>
-   <v-row>
-     <v-card
-      v-for="(item, i) in links"
-      :key="i"
-      class="ma-3 elevation-5 d-flex d-inline-flex justify-center align-center"
-      width="300"
-      :to="item.path"
-      color="grey"
-    >
-          <v-card-text>
-            <v-btn
-              text
-            >
-            <v-icon
-              large
-              color="white"
-            >
-              {{ item.icone }}
-            </v-icon>
-          </v-btn>
-          </v-card-text>
-              <v-card-text><h1>{{ item.nome }}</h1></v-card-text>
-    </v-card>
-   </v-row>
+  <v-container
+    fill-height
+    fluid
+  >
+    <v-row class="d-flex justify-center align-center">
+      <v-col
+        cols="6"
+        ms="12"
+      >
+          <v-card width="600" elevation="15">
+            <v-card-title class="d-flex justify-center align-center ma-2">
+                  <v-img max-width="200"
+                    src="@/assets/sifrao-logo.png"
+                  />
+            </v-card-title>
+            <v-card-title class="d-flex justify-center align-center ma-2">
+              <h1>Finananças Pessoais</h1>
+            </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

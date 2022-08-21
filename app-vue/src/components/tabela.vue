@@ -11,7 +11,7 @@
           <v-toolbar
             class="white--text"
             color="primary"
-            height="60"
+            dense
           >
             <v-toolbar-title>
               {{ titulo }}
@@ -24,7 +24,7 @@
       <v-icon
         small
         class="mr-2"
-        @click="exibir(item)"
+        @click="$emit('exibir', item[itemKey])"
       >
         mdi-eye
       </v-icon>

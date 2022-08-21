@@ -18,6 +18,7 @@
       <v-card-actions class="d-flex align-center justify-end">
         <v-btn
           color="primary"
+          outlined
           @click="$emit('adicionar')"
         >
           <v-icon>mdi-plus</v-icon>

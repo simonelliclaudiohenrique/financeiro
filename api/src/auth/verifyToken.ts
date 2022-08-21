@@ -5,6 +5,7 @@ export default class HookAutenticacao {
   // eslint-disable-next-line consistent-return
   async checkAutenticate(req: Request, res: Response, next: NextFunction) {
     try {
+      // eslint-disable-next-line no-console
       console.log(`${req.headers.host} - ${req.method} - ${req.url}`);
 
       const token = String(req.headers.authorization).replace('Bearer ', '');

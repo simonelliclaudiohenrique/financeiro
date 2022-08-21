@@ -18,7 +18,7 @@
       <v-spacer></v-spacer>
     <v-btn
       v-if="salvar"
-      color="primary"
+      color="success"
       @click="$emit('salvar')"
     >
       salvar
