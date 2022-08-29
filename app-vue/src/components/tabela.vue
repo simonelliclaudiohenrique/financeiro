@@ -22,7 +22,6 @@
         </template>
         <template v-slot:[`item.acao`]="{ item }">
       <v-icon
-        small
         class="mr-2"
         @click="$emit('exibir', item[itemKey])"
       >
@@ -57,12 +56,8 @@ export default {
 </script>
 
 <style>
-tbody tr:nth-of-type(even) {
-    background-color: #dfdcf7;
-}
-
 tbody tr:hover{
-    background-color: #bab8c6 !important;
+    background-color: #a388ee !important;
   }
 
 </style>

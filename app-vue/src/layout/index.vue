@@ -63,6 +63,11 @@
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-btn icon
+            @click="mudarTema()"
+          >
+            <v-icon>mdi-theme-light-dark</v-icon>
+          </v-btn>
         </div>
         <div class="d-flex d-inline-flex">
           <v-menu
@@ -169,6 +174,9 @@ export default {
       const res = await this.logout()
       if (!res.erro) this.$router.push('/login')
       this.loading = false
+    },
+    mudarTema () {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     }
   }
 }

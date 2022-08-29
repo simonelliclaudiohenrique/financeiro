@@ -7,7 +7,7 @@ export const login = async ({ commit }, dados) => {
     })
 
     if (res && !res.data.erro) {
-      localStorage.setItem('financeiro:token', res.data.token)
+      localStorage.setItem('financeiro:token', window.btoa(res.data.token))
       localStorage.setItem('financeiro:nome', window.btoa(res.data.payload.nome))
       localStorage.setItem('financeiro:email', window.btoa(res.data.payload.email))
 
