@@ -1,6 +1,9 @@
 <template>
-  <v-main id="login">
-    <v-container class="fill-height d-flex justify-center align-center">
+    <v-container
+      id="login"
+      fluid
+      fill-height
+    >
       <notificacao
         v-model="notificacao.value"
         :color="notificacao.color"
@@ -10,83 +13,82 @@
     <loading
      :loading="loading"
     />
-      <v-col cols="12" lg="6" xl="6" xs="12">
-        <v-card
-          id="card"
-          width="400"
-          height="380"
-          color="#222"
-        >
-          <v-card-text class="text-center">
-            <h1 :style="{ color: '#dec36a' }">Login</h1>
-          </v-card-text>
-          <v-card-text>
-            <validation-observer ref="observer">
-              <v-form>
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="Email"
-                  rules="required"
-                  vid="email"
-                >
+      <v-row class="d-flex d-inline-flex justify-center align-center">
+          <v-card
+            id="card"
+            width="400"
+            height="380"
+            color="#222"
+          >
+            <v-card-text class="text-center">
+              <h1 :style="{ color: '#dec36a' }">Login</h1>
+            </v-card-text>
+            <v-card-text>
+              <validation-observer ref="observer">
+                <v-form>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="Email"
+                    rules="required"
+                    vid="email"
+                  >
+                    <v-text-field
+                      class="mb-10 mt-10"
+                      v-model="formulario.email"
+                      :error-messages="errors"
+                      :hide-details="!errors.length"
+                      outlined
+                      rounded
+                      dark
+                      background-color="#777"
+                      dense
+                      clearable
+                      label="E-mail"
+                    @keydown.enter="efetuarLogin()"
+                    ></v-text-field>
+                  </validation-provider>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="Senha"
+                    rules="required"
+                    vid="senha"
+                  >
                   <v-text-field
-                    class="mb-10 mt-10"
-                    v-model="formulario.email"
+                    id="senha"
+                    ref="senha"
+                    v-model="formulario.senha"
                     :error-messages="errors"
                     :hide-details="!errors.length"
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show ? 'text' : 'password'"
                     outlined
                     rounded
                     dark
                     background-color="#777"
                     dense
                     clearable
-                    label="E-mail"
-                  @keydown.enter="efetuarLogin()"
-                  ></v-text-field>
-                </validation-provider>
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="Senha"
-                  rules="required"
-                  vid="senha"
-                >
-                <v-text-field
-                  id="senha"
-                  ref="senha"
-                  v-model="formulario.senha"
-                  :error-messages="errors"
-                  :hide-details="!errors.length"
-                  :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="show ? 'text' : 'password'"
-                  outlined
-                  rounded
-                  dark
-                  background-color="#777"
-                  dense
-                  clearable
-                  label="senha"
-                  @click:append="show = !show"
-                  @keydown.enter="efetuarLogin()"
-                />
-                </validation-provider>
-              </v-form>
-            </validation-observer>
-          </v-card-text>
-          <v-card-actions class="d-flex align-center justify-center">
-            <v-btn
-              class="mt-10 mb-0"
-              width="300"
-              rounded
-              color="success"
-              @click="efetuarLogin()"
-            >
-              login
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+                    label="senha"
+                    @click:append="show = !show"
+                    @keydown.enter="efetuarLogin()"
+                  />
+                  </validation-provider>
+                </v-form>
+              </validation-observer>
+            </v-card-text>
+            <v-card-actions class="d-flex align-center justify-center">
+              <v-btn
+                class="mt-10 mb-0"
+                width="300"
+                rounded
+                color="success"
+                @click="efetuarLogin()"
+              >
+                login
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-row>
     </v-container>
-  </v-main>
 </template>
 
 <script>

@@ -1,19 +1,24 @@
 <template>
-   <div>
+<v-container
+  fluid
+  class="ma-0 pa-0"
+>
        <v-app-bar
-        color="#222"
+          color="deep-purple accent-4"
+          dense
+          dark
        >
         <div>
           <v-img
             :style="{cursor: 'pointer'}"
             src="@/assets/sifrao-logo.png"
-            max-width="60"
+            max-width="35"
             @click="$router.push('/')"
           />
         </div>
         <h1
           class="cursor:pointer"
-          :style="{color: '#dec36a', cursor: 'pointer'}"
+          :style="{color: '#fff', cursor: 'pointer'}"
           @click="$router.push('/')"
         >
           Finances
@@ -27,9 +32,8 @@
           >
             <template v-slot:activator="{ on }">
               <v-btn
-                :style="{color: '#dec36a'}"
+                :style="{color: '#fff'}"
                 class="ma-5 title"
-                outlined
                 text
                 large
                 v-on="on"
@@ -69,7 +73,7 @@
             <template v-slot:activator="{ on }">
               <v-avatar
                 :style="{cursor: 'pointer'}"
-                color="#dec36a"
+                color="#fff"
                 class="black--text font-weight-black headline"
                 size="45"
                 v-on="on"
@@ -108,20 +112,20 @@
         fluid
         class="ma-0 pa-0"
      >
-       <v-main>
+     </v-container>
+      <v-main>
         <router-view/>
       </v-main>
-     </v-container>
 
        <v-footer app
-      id="footer"
-      height="40"
-      class="d-flex d-inline-flex align-center justify-center"
-      color="#222"
+          dark
+          dense
+          class="d-flex d-inline-flex align-center justify-center pa-0 ma-0"
+          color="deep-purple accent-4"
        >
-      <p>direitos reservados</p>
+        direitos reservados
        </v-footer>
-   </div>
+</v-container>
 </template>
 
 <script>
@@ -169,8 +173,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-#footer p {
-  color: #dec36a;
-}
-</style>
