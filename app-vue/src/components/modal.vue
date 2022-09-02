@@ -2,12 +2,11 @@
   <v-container
    v-if="modal"
   >
-  <v-row class="mb-1">
-   <v-col cols="12">
+  <v-card elevation-3>
+    <v-row dense>
      <v-toolbar dense dark color="primary">
         Formulario
     </v-toolbar>
-   </v-col>
   </v-row>
   <v-row>
     <v-col cols="12">
@@ -16,7 +15,10 @@
   </v-row>
     <v-row justify="space-around">
       <v-spacer></v-spacer>
-    <v-btn
+   <v-card-actions>
+     <v-btn
+      width="150"
+      dense
       v-if="salvar"
       color="success"
       @click="$emit('salvar')"
@@ -24,19 +26,25 @@
       salvar
     </v-btn>
     <v-btn
+    width="150"
       v-if="editar"
-      color="primary"
+      color="success"
+      @click="$emit('editar')"
     >
       editar
     </v-btn>
     <v-btn
-      class="ml-2"
+      width="150"
+      dense
+      class="mx-2"
       color="error"
       @click="$emit('cancelar')"
     >
       cancelar
     </v-btn>
+   </v-card-actions>
   </v-row>
+  </v-card>
   </v-container>
 </template>
 

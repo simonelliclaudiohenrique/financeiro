@@ -164,7 +164,11 @@ export default {
       ? window.atob(localStorage.getItem('financeiro:nome'))
       : ''
   }),
-
+  created () {
+    if (localStorage.getItem('financeiro:tema') === 'dark') {
+      this.$vuetify.theme.dark = true
+    }
+  },
   methods: {
     ...mapActions('app', [
       'logout'
@@ -177,6 +181,7 @@ export default {
     },
     mudarTema () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      window.btoa(localStorage.setItem('financeiro:tema', this.$vuetify.theme.dark ? 'dark' : 'light'))
     }
   }
 }

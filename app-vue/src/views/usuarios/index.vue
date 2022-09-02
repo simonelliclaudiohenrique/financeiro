@@ -6,12 +6,13 @@
     <modal
       :modal="modal"
       :salvar="!!(!controle.exibir && !controle.editar)"
-      :editar="!!(controle.exibir && !controle.salvar)"
+      :editar="!!(controle.exibir && !controle.inserir)"
       @cancelar="resetFormulario()"
+      @editar="controle.exibir = false"
     >
-       <template slot="formulario">
+       <template v-slot:formulario>
         <v-form>
-        <v-row>
+        <v-row class="mx-2">
           <v-col
             cols="12"
             lg="4"
@@ -20,6 +21,8 @@
             xs="12"
           >
             <v-text-field
+              v-model="formulario.nome"
+              :disabled="controle.exibir"
               outlined
               hide-details
               dense
@@ -34,10 +37,12 @@
             xs="12"
           >
             <v-text-field
+              v-model="formulario.email"
+              :disabled="controle.exibir"
               outlined
               hide-details
               dense
-              label="nome"
+              label="e-mail"
             />
           </v-col>
           <v-col
@@ -48,10 +53,12 @@
             xs="12"
           >
             <v-text-field
+              v-model="formulario.senha"
+              :disabled="controle.exibir"
               outlined
               hide-details
               dense
-              label="nome"
+              label="senha"
             />
           </v-col>
         </v-row>
@@ -63,14 +70,16 @@
       <filtro
         @pesquisar="listarRegistros()"
         @adicionar="modal = true"
+        @limparFiltro="limparFiltros()"
       >
-        <template slot="filtro">
+        <template v-slot:filtro>
           <v-col
             cols="12"
             sm="6"
             md="6"
           >
             <v-text-field
+              v-model="filtro.nome"
               color="primary"
               outlined
               hide-details
@@ -84,6 +93,7 @@
             md="6"
           >
             <v-text-field
+              v-model="filtro.email"
               color="primary"
               outlined
               hide-details
@@ -96,6 +106,7 @@
       <tabela
         :colunas="colunas"
         :registros="registros"
+        @exibir="exibirRegistro($event)"
       />
     </div>
   </v-container>
@@ -135,6 +146,15 @@ export default {
       inserir: false,
       exibir: false,
       editar: false
+    },
+    filtro: {
+      nome: null,
+      email: null
+    },
+    formulario: {
+      id: null,
+      nome: null,
+      email: null
     }
   }),
 
@@ -143,20 +163,57 @@ export default {
   },
 
   async created () {
-    this.listarRegistros()
+    await this.listarRegistros()
   },
 
   methods: {
-    ...mapActions('paginaCadastroUsuario', ['listar']),
+    ...mapActions('paginaCadastroUsuario', ['listar', 'exibir']),
 
     async listarRegistros () {
       this.loading = true
-      await this.listar()
+      await this.listar({
+        nome: this.filtro.nome || '',
+        email: this.filtro.email || ''
+      })
+      this.loading = false
+    },
+
+    async exibirRegistro (id) {
+      this.loading = true
+      const res = await this.exibir(id)
+      if (res && !res.erro) {
+        this.formulario = {
+          id: res.id || null,
+          nome: res.nome || null,
+          email: res.email || null,
+          senha: res.senha || null
+        }
+      }
+      window.console.log(res)
+      this.modal = true
+      this.controle.exibir = true
       this.loading = false
     },
 
     resetFormulario () {
+      this.controle = {
+        exibir: false,
+        inserir: false,
+        editar: false
+      }
+      this.formulario = {
+        id: null,
+        nome: null,
+        email: null
+      }
       this.modal = false
+    },
+    limparFiltros () {
+      this.filtro = {
+        nome: null,
+        email: null
+      }
+      this.listarRegistros()
     }
   }
 }

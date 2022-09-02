@@ -1,6 +1,7 @@
 import validate from 'validate.js';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
+import { Op } from 'sequelize';
 import Usuarios from '../models/usuarios';
 
 class UsuariosController {
@@ -12,8 +13,18 @@ class UsuariosController {
 
   public listar = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const resgistro = await Usuarios.findAll();
+      const resgistro = await Usuarios.findAll({
+        where: {
+          nome: req.query && {
+            [Op.like]: `%${req.query.nome}%`,
+          },
+          email: req.query && {
+            [Op.like]: `%${req.query.email}%`,
+          },
+        },
+      });
       return res.json(resgistro.map((el) => ({
+        id: el?.id,
         nome: el?.nome,
         email: el?.email,
       })));
@@ -25,7 +36,7 @@ class UsuariosController {
   public exibir = async (req: Request, res: Response): Promise<Response> => {
     try {
       const resgistro = await Usuarios.findOne({
-        attributes: ['nome', 'email'],
+        attributes: ['id', 'nome', 'email'],
         where: {
           id: req.params.id,
         },

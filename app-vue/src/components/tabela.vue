@@ -2,9 +2,12 @@
   <v-container>
     <v-card>
       <v-data-table
+        :id="!$vuetify.theme.dark ? 'table' : ''"
         :headers="colunas"
         :items="registros"
         :items-per-page="5"
+        :item-key="itemKey"
+
         class="elevation-4"
       >
         <template v-slot:top>
@@ -28,6 +31,11 @@
         mdi-eye
       </v-icon>
     </template>
+    <!-- <v-style v-if="!$vuetify.theme.dark">
+      tbody tr:nth-of-type(even) {background-color: red; importante!}
+    </v-style>
+    <v-style v-if="lineHouver">
+    </v-style> -->
       </v-data-table>
     </v-card>
   </v-container>
@@ -49,6 +57,10 @@ export default {
       titulo: {
         type: String,
         default: 'Registros'
+      },
+      itemKey: {
+        type: String,
+        default: 'id'
       }
     }
 
@@ -56,6 +68,9 @@ export default {
 </script>
 
 <style>
+#table tbody tr:nth-of-type(even) {
+  background-color: #f5f5;
+}
 tbody tr:hover{
     background-color: #a388ee !important;
   }
