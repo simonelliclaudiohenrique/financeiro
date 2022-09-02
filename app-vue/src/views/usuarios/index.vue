@@ -172,8 +172,8 @@ export default {
     async listarRegistros () {
       this.loading = true
       await this.listar({
-        nome: this.filtro.nome || '',
-        email: this.filtro.email || ''
+        nome: this.filtro.nome || null,
+        email: this.filtro.email || null
       })
       this.loading = false
     },

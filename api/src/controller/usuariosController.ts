@@ -14,12 +14,18 @@ class UsuariosController {
   public listar = async (req: Request, res: Response): Promise<Response> => {
     try {
       const resgistro = await Usuarios.findAll({
-        where: {
-          nome: req.query && {
-            [Op.like]: `%${req.query.nome}%`,
+        ...req.query.nome && {
+          where: {
+            nome: {
+              [Op.like]: `%${req.query.nome}%`,
+            },
           },
-          email: req.query && {
-            [Op.like]: `%${req.query.email}%`,
+        },
+        ...req.query.email && {
+          where: {
+            email: {
+              [Op.like]: `%${req.query.email}%`,
+            },
           },
         },
       });
