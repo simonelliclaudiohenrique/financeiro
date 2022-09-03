@@ -3,66 +3,110 @@
     <loading
       :loading="loading"
     />
+    <notificacao
+       v-model="notificacao.value"
+        :color="notificacao.color"
+        :text="notificacao.text"
+    />
     <modal
       :modal="modal"
       :salvar="!!(!controle.exibir && !controle.editar)"
       :editar="!!(controle.exibir && !controle.inserir)"
       @cancelar="resetFormulario()"
       @editar="controle.exibir = false"
+      @salvar="salvarRegistro()"
     >
+        <template v-slot:maisOpcoes>
+          <v-btn
+            light
+            small
+            class="red--text"
+          >
+            <v-icon color="error">
+              mdi-trash-can
+            </v-icon>
+            excluir
+          </v-btn>
+        </template>
        <template v-slot:formulario>
-        <v-form>
-        <v-row class="mx-2">
-          <v-col
-            cols="12"
-            lg="4"
-            xl="4"
-            md="6"
-            xs="12"
-          >
-            <v-text-field
-              v-model="formulario.nome"
-              :disabled="controle.exibir"
-              outlined
-              hide-details
-              dense
-              label="nome"
-            />
-          </v-col>
-          <v-col
-            cols="12"
-            lg="4"
-            xl="4"
-            md="6"
-            xs="12"
-          >
-            <v-text-field
-              v-model="formulario.email"
-              :disabled="controle.exibir"
-              outlined
-              hide-details
-              dense
-              label="e-mail"
-            />
-          </v-col>
-          <v-col
-            cols="12"
-            lg="4"
-            xl="4"
-            md="6"
-            xs="12"
-          >
-            <v-text-field
-              v-model="formulario.senha"
-              :disabled="controle.exibir"
-              outlined
-              hide-details
-              dense
-              label="senha"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
+        <validation-observer ref="observer">
+            <v-form>
+            <v-row class="mx-2">
+              <v-col
+                cols="12"
+                lg="4"
+                xl="4"
+                md="6"
+                xs="12"
+              >
+              <validation-provider
+                v-slot="{ errors }"
+                name="Nome"
+                rules="required"
+                vid="nome"
+              >
+                <v-text-field
+                  v-model="formulario.nome"
+                  :error-messages="errors"
+                  :hide-details="!errors.length"
+                  :disabled="controle.exibir"
+                  outlined
+                  dense
+                  label="nome"
+                />
+              </validation-provider>
+              </v-col>
+              <v-col
+                cols="12"
+                lg="4"
+                xl="4"
+                md="6"
+                xs="12"
+              >
+              <validation-provider
+                v-slot="{ errors }"
+                name="E-mail"
+                rules="required"
+                vid="email"
+              >
+                <v-text-field
+                  v-model="formulario.email"
+                  :error-messages="errors"
+                  :hide-details="!errors.length"
+                  :disabled="controle.exibir"
+                  outlined
+                  dense
+                  label="E-mail"
+                />
+              </validation-provider>
+              </v-col>
+              <v-col
+                cols="12"
+                lg="4"
+                xl="4"
+                md="6"
+                xs="12"
+              >
+              <validation-provider
+                v-slot="{ errors }"
+                name="Senha"
+                rules="required"
+                vid="senha"
+              >
+                <v-text-field
+                  v-model="formulario.senha"
+                  :error-messages="errors"
+                  :hide-details="!errors.length"
+                  :disabled="controle.exibir"
+                  outlined
+                  dense
+                  label="senha"
+                />
+              </validation-provider>
+              </v-col>
+            </v-row>
+          </v-form>
+        </validation-observer>
        </template>
     </modal>
 
@@ -114,7 +158,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import notificacao from '../../components/notificacao.vue'
 export default {
+  components: { notificacao },
   name: 'paginaUsuarios',
   data: () => ({
     colunas: [
@@ -155,6 +201,11 @@ export default {
       id: null,
       nome: null,
       email: null
+    },
+    notificacao: {
+      value: null,
+      text: '',
+      color: ''
     }
   }),
 
@@ -167,7 +218,13 @@ export default {
   },
 
   methods: {
-    ...mapActions('paginaCadastroUsuario', ['listar', 'exibir']),
+    ...mapActions('paginaCadastroUsuario', [
+      'listar',
+      'exibir',
+      'salvar',
+      'excluir',
+      'editar'
+    ]),
 
     async listarRegistros () {
       this.loading = true
@@ -188,10 +245,62 @@ export default {
           email: res.email || null,
           senha: res.senha || null
         }
+      } else if (typeof res.erro === 'object') {
+        this.notificacao = {
+          value: true,
+          text: res.erro,
+          color: 'error'
+        }
       }
-      window.console.log(res)
       this.modal = true
       this.controle.exibir = true
+      this.loading = false
+    },
+    async salvarRegistro () {
+      if (await this.$refs.observer.validate()) {
+        this.loading = true
+        const form = {
+          id: this.formulario.id || undefined,
+          nome: this.formulario.nome || undefined,
+          email: this.formulario.email || undefined,
+          senha: this.formulario.senha || undefined
+        }
+        let res
+        if (form.id) res = await this.editar(form)
+        else if (!form.id) res = await this.salvar(form)
+        if (res) {
+          if (res && !res.erro) {
+            this.notificacao = {
+              value: true,
+              text: res.message,
+              color: 'success'
+            }
+            this.resetFormulario()
+          } else {
+            this.$refs.observer.setErrors(res.erro)
+            this.notificacao = {
+              value: true,
+              text: res.erro,
+              color: 'error'
+            }
+          }
+        }
+        this.loading = false
+      }
+    },
+
+    async excluirRegistro () {
+      this.loading = true
+      const res = await this.excluir(this.formulario.id)
+      if (res && !res.erro) {
+        this.resetFormulario()
+      } else {
+        this.notificacao = {
+          value: true,
+          text: res.erro,
+          color: 'error'
+        }
+      }
       this.loading = false
     },
 
@@ -206,6 +315,7 @@ export default {
         nome: null,
         email: null
       }
+      this.listarRegistros()
       this.modal = false
     },
     limparFiltros () {

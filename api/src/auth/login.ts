@@ -26,7 +26,7 @@ class LoginController {
       const token = jwt.sign({
         nome: usuario.nome,
         email: usuario.email,
-      }, process.env.APP_KEY, { expiresIn: '1h' });
+      }, process.env.APP_KEY, { expiresIn: '7h' });
 
       return res.json({
         token,

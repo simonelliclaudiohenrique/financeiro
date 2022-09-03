@@ -6,6 +6,8 @@
     <v-row dense>
      <v-toolbar dense dark color="primary">
         Formulario
+        <v-spacer></v-spacer>
+        <slot name="maisOpcoes"/>
     </v-toolbar>
   </v-row>
   <v-row>

@@ -80,7 +80,7 @@ class UsuariosController {
         throw Error('Usuário já cadastrado com este email!');
       }
 
-      return res.json('Usuario inserido com sucesso!');
+      return res.json({ message: 'Usuario inserido com sucesso!' });
     } catch (error) {
       return res.json({ erro: error.message });
     }
@@ -111,6 +111,7 @@ class UsuariosController {
       if (usuario.id !== resgistro.id) throw new Error('Usuario já cadastrado com este email!');
 
       const novoUsuario = {
+        id: req.params.id,
         nome: req.body.nome,
         email: req.body.email,
         senha: encriptPassword(req.body.senha),
@@ -118,7 +119,7 @@ class UsuariosController {
 
       await Usuarios.update(novoUsuario, { where: { id: req.params.id } });
 
-      return res.json('Usuario Alterado com sucesso');
+      return res.json({ message: 'Usuario Alterado com sucesso' });
     } catch (error) {
       return res.json({ erro: error.message });
     }

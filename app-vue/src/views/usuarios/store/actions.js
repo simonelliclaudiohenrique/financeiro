@@ -23,3 +23,33 @@ export const exibir = async ({ commit }, id) => {
     return null
   }
 }
+
+export const excluir = async ({ commit }, id) => {
+  try {
+    const res = await axios.delete(`/usuarios/${id}`)
+
+    return res.data
+  } catch (error) {
+    return null
+  }
+}
+
+export const salvar = async ({ commit }, dados) => {
+  try {
+    const res = await axios.post('/usuarios', dados)
+
+    return res.data
+  } catch (error) {
+    return null
+  }
+}
+
+export const editar = async ({ commit }, dados) => {
+  try {
+    const res = await axios.put(`/usuarios/${dados.id}`, dados)
+
+    return res.data
+  } catch (error) {
+    return null
+  }
+}
