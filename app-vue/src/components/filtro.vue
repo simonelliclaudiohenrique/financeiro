@@ -1,6 +1,8 @@
 <template>
-  <v-container>
-    <v-card
+  <v-container fluid class="py-0 my-0" >
+   <v-row>
+     <v-col cols="12">
+      <v-card
       class="elevation-4"
     >
       <v-toolbar dense color="primary"
@@ -39,6 +41,8 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+     </v-col>
+   </v-row>
   </v-container>
 </template>
 

@@ -1,13 +1,15 @@
 <template>
-<v-container
-  fluid
-  class="ma-0 pa-0"
->
-       <v-app-bar
+    <v-container
+      fluid
+      class="ma-0 pa-0"
+    >
+        <v-app-bar
+          app
+          class="my-0 py-0"
           color="deep-purple accent-4"
           dense
           dark
-       >
+        >
         <div>
           <v-img
             :style="{cursor: 'pointer'}"
@@ -116,11 +118,9 @@
        <v-container
         fluid
         class="ma-0 pa-0"
-     >
-     </v-container>
-      <v-main>
+      >
         <router-view/>
-      </v-main>
+     </v-container>
 
        <v-footer app
           dark

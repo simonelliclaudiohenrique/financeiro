@@ -16,11 +16,12 @@
       @editar="controle.exibir = false"
       @salvar="salvarRegistro()"
     >
-        <template v-slot:maisOpcoes>
+        <template v-if="controle.exibir" v-slot:maisOpcoes>
           <v-btn
             light
             small
             class="red--text"
+            @click="excluirRegistro()"
           >
             <v-icon color="error">
               mdi-trash-can
@@ -176,7 +177,7 @@ export default {
         align: 'start',
         sortable: false,
         value: 'nome',
-        width: 200
+        width: 300
       },
       {
         text: 'E-mail',
@@ -293,6 +294,11 @@ export default {
       this.loading = true
       const res = await this.excluir(this.formulario.id)
       if (res && !res.erro) {
+        this.notificacao = {
+          value: true,
+          text: res,
+          color: 'success'
+        }
         this.resetFormulario()
       } else {
         this.notificacao = {

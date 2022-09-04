@@ -62,7 +62,7 @@ class UsuariosController {
         const salt = bcrypt.genSaltSync(10);
         return bcrypt.hashSync(password, salt);
       };
-      if (erro) return res.status(400).json(erro);
+      if (erro) throw new Error('E-mail Inválido verifique e tente novamente!');
 
       const resgistro = await Usuarios.findOne({
         where: {
@@ -94,24 +94,32 @@ class UsuariosController {
         return bcrypt.hashSync(password, salt);
       };
 
-      if (erro) return res.status(400).json(erro);
+      if (erro) throw new Error('E-mail Inválido verifique e tente novamente!');
       if (!req.params.id) throw new Error('Usuario não informado');
-      const resgistro = await Usuarios.findOne({
+      const usuario = await Usuarios.findOne({
         where: {
           id: req.params.id,
         },
       });
-      if (!resgistro) throw new Error('Usuario não encontrado!');
-
-      const usuario = await Usuarios.findOne({
+      if (!usuario) throw new Error('Usuario não encontrado!');
+      const usuarioEmail = await Usuarios.findOne({
         where: {
+          id: {
+            [Op.not]: req.params.id,
+          },
           email: req.body.email,
         },
       });
-      if (usuario.id !== resgistro.id) throw new Error('Usuario já cadastrado com este email!');
+      if (usuarioEmail) throw new Error('Usuario já cadastrado com este email!');
+
+      // const usuario = await Usuarios.findOne({
+      //   where: {
+      //     email: req.body.email,
+      //   },
+      // });
+      // if (usuario.id !== resgistro.id) throw new Error('Usuario já cadastrado com este email!');
 
       const novoUsuario = {
-        id: req.params.id,
         nome: req.body.nome,
         email: req.body.email,
         senha: encriptPassword(req.body.senha),
