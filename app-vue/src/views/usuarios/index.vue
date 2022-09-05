@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid align-center>
     <loading
       :loading="loading"
     />
@@ -8,25 +8,33 @@
         :color="notificacao.color"
         :text="notificacao.text"
     />
-    <modal
-      :modal="modal"
-      :salvar="!!(!controle.exibir && !controle.editar)"
-      :editar="!!(controle.exibir && !controle.inserir)"
-      @cancelar="resetFormulario()"
-      @editar="controle.exibir = false"
-      @salvar="salvarRegistro()"
-    >
+
+    <v-row class="align-center justify-center">
+      <v-col cols="12"
+      xl="8"
+      lg="9"
+      md="12"
+      xs="12"
+      >
+        <modal
+          :modal="modal"
+          :salvar="!!(!controle.exibir && !controle.editar)"
+          :editar="!!(controle.exibir && !controle.inserir)"
+          @cancelar="resetFormulario()"
+          @editar="controle.exibir = false"
+          @salvar="salvarRegistro()"
+        >
         <template v-if="controle.exibir" v-slot:maisOpcoes>
           <v-btn
             light
             small
-            class="red--text"
+            text
             @click="excluirRegistro()"
           >
             <v-icon color="error">
               mdi-trash-can
             </v-icon>
-            excluir
+             <span class="red--text">excluir</span>
           </v-btn>
         </template>
        <template v-slot:formulario>
@@ -154,14 +162,14 @@
         @exibir="exibirRegistro($event)"
       />
     </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import notificacao from '../../components/notificacao.vue'
 export default {
-  components: { notificacao },
   name: 'paginaUsuarios',
   data: () => ({
     colunas: [
